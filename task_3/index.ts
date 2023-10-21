@@ -45,3 +45,30 @@ const BALLONS: { [key: string]: BallonI } = {
 };
 
 // Ваш код здесь
+(async function () {
+  const getSummaryAmount = async (items, fetchFunc) => {
+    const filteredIds = Object.values(items)
+      .filter(({ isPublic }) => !!isPublic)
+      .map(({ id }) => id);
+
+    const promisesArray = filteredIds.map(async (id) => {
+      const certainAmount = await fetchFunc(id);
+
+      return {
+        sum: certainAmount
+      };
+    });
+
+    const allPromisesArr = await Promise.all(promisesArray);
+
+    const summaryAmount = allPromisesArr.reduce((acc, item) => {
+      return acc + item.sum;
+    }, 0);
+
+    return summaryAmount;
+  };
+
+  const answer = await getSummaryAmount(BALLONS, fetchBallonAmount);
+
+  console.log("answer", answer);
+})();
