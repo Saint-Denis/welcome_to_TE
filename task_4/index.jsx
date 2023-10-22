@@ -1,48 +1,30 @@
-import { useState } from "react";
+// ФАЙЛ С КОРНЕВЫМ КОМПОНЕНТОМ ДЛЯ РЕДАКТИРОВАНИЯ ПОДКЛЮЧАЕМЫХ ТЕСТОВЫХ КОМПОНЕНТОВ
 
-export const Block1 = ({ mouseEnterCallbak, imgSrc, imgAlt }) => {
-  const [isActive, setActive] = useState(false);
+import { Fragment, StrictMode } from "react";
+import ReactDOM from "react-dom";
 
-  const mouseEnterHandler = () => {
-    setActive(true);
-    mouseEnterCallbak();
-  };
+import { Wrapper, Block } from "./taskComponents";
+import { config } from "./config";
 
-  return (
-    <div onMouseEnter={mouseEnterHandler} className={isActive ? "active" : ""}>
-      <img src={imgSrc} alt={imgAlt} />
-    </div>
-  );
-};
+function App() {
+  return config.map(({ imgSrc, imgAlt, callback, content, userData, ui }) => {
+    return (
+      <Wrapper mouseEnterCallbak={callback}>
+        <Block
+          key={ui}
+          imgSrc={imgSrc}
+          imgAlt={imgAlt}
+          content={content}
+          userData={userData}
+        />
+      </Wrapper>
+    );
+  });
+}
 
-export const Block2 = ({ mouseEnterCallbak, content }) => {
-  const [isActive, setActive] = useState(false);
-
-  const mouseEnterHandler = () => {
-    setActive(true);
-    mouseEnterCallbak();
-  };
-
-  return (
-    <div onMouseEnter={mouseEnterHandler} className={isActive ? "active" : ""}>
-      <p>{content}</p>
-    </div>
-  );
-};
-
-export const Block3 = ({ mouseEnterCallbak, userData }) => {
-  const [isActive, setActive] = useState(false);
-
-  const mouseEnterHandler = () => {
-    setActive(true);
-    mouseEnterCallbak();
-  };
-
-  return (
-    <div onMouseEnter={mouseEnterHandler} className={isActive ? "active" : ""}>
-      <address>
-        country: {userData.country}, street: {userData.street}
-      </address>
-    </div>
-  );
-};
+ReactDOM.render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+  document.getElementById("root")
+);
